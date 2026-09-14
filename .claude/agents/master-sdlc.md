@@ -57,18 +57,28 @@ All output documents go to **generatedDocs/ folder** (not project root or .claud
 - Run unit tests and Playwright CLI verification.
 - Output: `verify-results.txt` to generatedDocs/.
 
-### Step 8: PR Preparation & Confluence Sync
-- Invoke `step8-pr-agent` agent to draft PR summary.
-- After PR approval, invoke `confluence-tree-creator` skill to create/update Confluence documentation tree.
-- Document structure should sync to Confluence with all pipeline artifacts.
+### Step 8: PR Preparation & Confluence Sync (4 Sub-Steps)
+- **8a. Run Verification (if not already done)**: Invoke `step7-verification` agent.
+  - Output: `verify-results.txt` to generatedDocs/.
+- **8b. Create Confluence Documentation Tree**: Invoke `confluence-tree-creator` skill.
+  - Input: All generatedDocs/ artifacts.
+  - Output: Confluence space with documentation tree structure.
+  - Structure: Root → Phase pages (Requirements, Architecture, Design, Implementation, Verification) → Supporting docs.
+- **8c. Draft PR Summary**: Invoke `step8-pr-agent` agent.
+  - Summarize all 8 steps and evidence.
+  - Output: `pr-summary.md` to generatedDocs/.
+- **8d. Create GitHub PR**: Use `gh pr create` from feature/docsync → main.
+  - Body: Content from pr-summary.md.
+  - Output: PR URL and confirmation.
 
 ## Critical Rules
 1. **File paths**: All documents written to `generatedDocs/`, NEVER to project root or .claude/
-2. **Sequencing**: Steps run in order. Don't skip steps or run in parallel.
+2. **Sequencing**: Steps run in order. Step 8 has 4 sub-steps: verification → confluence → PR summary → PR create
 3. **Checkpoints**: After Step 1, pause and wait for human approval.
-4. **Confluence**: Only sync to Confluence AFTER Step 8 PR is prepared.
-5. **Secrets**: Enforce zero-trust security; run secret guard hook before shipping.
-6. **Branch**: Use `feature/docsync` branch for all documentation sync work.
+4. **Verification First**: Step 7 must run before Step 8 (8a runs Step 7 if needed).
+5. **Confluence Before PR**: Create Confluence tree (8b) before opening PR (8d).
+6. **Secrets**: Enforce zero-trust security; run secret guard hook before shipping.
+7. **Branch**: Use `feature/docsync` branch for all documentation sync work.
 
 ## Status Format at Each Step
 - **Step X: [Name]** — current step
