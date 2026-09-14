@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "permissions": {
+    "allow": [
+      "Bash(npm test *)",
+      "Bash(npm run *)",
+      "Bash(tee /tmp/**)",
+      "Bash(find * -maxdepth * -type * -name *)",
+      "Bash(ls -la *)",
+      "Bash(rm -f *)",
+      "Read(//tmp/**)",
+      "Read(**/*.md)",
+      "Read(**/src/**)",
+      "Read(**/tests/**)",
+      "Read(**/.env*)",
+      "Glob(*)",
+      "Grep(*)"
+    ]
+  },
+  "enabledMcpjsonServers": [
+    "playwright",
+    "atlassian",
+    "github"
+  ],
+  "tools": {
+    "Bash": {
+      "trusted": true
+    }
+  }
+}
