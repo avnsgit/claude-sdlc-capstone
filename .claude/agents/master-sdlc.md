@@ -60,10 +60,12 @@ All output documents go to **generatedDocs/ folder** (not project root or .claud
 ### Step 8: PR Preparation & Confluence Sync (4 Sub-Steps)
 - **8a. Run Verification (if not already done)**: Invoke `step7-verification` agent.
   - Output: `verify-results.txt` to generatedDocs/.
-- **8b. Create Confluence Documentation Tree**: Invoke `confluence-tree-creator` skill.
-  - Input: All generatedDocs/ artifacts.
-  - Output: Confluence space with documentation tree structure.
-  - Structure: Root → Phase pages (Requirements, Architecture, Design, Implementation, Verification) → Supporting docs.
+### Step 8b: Create or Update Confluence Documentation (Smart Logic)
+- Invoke `confluence-tree-creator` skill
+- **First Run:** Creates root page + 8 phase pages (1-8)
+- **Other Runs:** Updates all 8 phase pages with latest artifacts
+- Structure: Root "Claude SDLC Capstone" with 8 nested phase pages
+- Phase 8 = Pull Request (with PR URL and details)
 - **8c. Draft PR Summary**: Invoke `step8-pr-agent` agent.
   - Summarize all 8 steps and evidence.
   - Output: `pr-summary.md` to generatedDocs/.
