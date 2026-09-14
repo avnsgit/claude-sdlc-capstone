@@ -1,0 +1,26 @@
+{
+  "PreToolUse": [
+    {
+      "matcher": "*",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "bash .claude/hooks/scripts/pre-commit-secret-guard.sh",
+          "description": "Scan for hardcoded secrets before changes are applied."
+        }
+      ]
+    }
+  ],
+  "PostToolUse": [
+    {
+      "matcher": "*",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "bash .claude/hooks/scripts/post-impl-doc-check.sh",
+          "description": "Verify required SDLC documentation exists after implementation."
+        }
+      ]
+    }
+  ]
+}

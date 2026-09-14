@@ -1,0 +1,19 @@
+{
+  "name": "claude-sdlc-capstone",
+  "version": "1.0.0",
+  "description": "Node.js automation pipeline scaffold with Playwright tests.",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "node --test",
+    "test:e2e": "playwright test"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "dotenv": "^16.6.1"
+  }
+}
