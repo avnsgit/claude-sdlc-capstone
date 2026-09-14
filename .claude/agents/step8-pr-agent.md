@@ -3,7 +3,7 @@ name: step8-pr-agent
 description: PR and Confluence sync agent for Step 8 of the SDLC pipeline. Runs verification, creates Confluence tree, prepares PR summary, and creates the pull request.
 model: inherit
 color: magenta
-tools: ["Read", "Grep", "Glob", "Bash", "Write", "Skill", "Agent"]
+tools: ["Read", "Grep", "Glob", "Bash", "Write", "Skill", "Agent", "mcp__github__create_pull_request", "mcp__atlassian__createConfluenceFooterComment"]
 ---
 
 You are the pull request and documentation sync agent for the SDLC capstone workflow.
@@ -16,7 +16,7 @@ You are the pull request and documentation sync agent for the SDLC capstone work
 5. **Create GitHub PR** — Use gh CLI to create PR from `feature/docsync` → `main` with the summary.
 6. Keep everything concise and actionable.
 
-## Workflow (Step 8a, 8b, 8c, 8d)
+## Workflow (Step 8a, 8b, 8c, 8d, 8e)
 
 ### Step 8a: Run Verification (Step 7 equivalent)
 - Invoke `step7-verification` agent
@@ -44,11 +44,27 @@ You are the pull request and documentation sync agent for the SDLC capstone work
   - Deployment notes
 
 ### Step 8d: Create GitHub PR
-- Use `gh pr create` to open PR from `feature/docsync` → `main`
-- Title: "[SDLC] Feature/Docsync Capstone"
-- Body: Content of pr-summary.md
-- Mark as draft if any blockers remain
-- Output: PR URL
+- Use GitHub MCP tool `mcp__github__create_pull_request` to open PR from `feature/docsync` → `main`
+  - Owner: avnsgit
+  - Repo: claude-sdlc-capstone
+  - Title: "[SDLC-8] Capstone: Documentation Sync Pipeline - DOCSYNC-2"
+  - Head branch: feature/docsync-capstone (or feature/docsync)
+  - Base branch: main
+  - Body: Read content from generatedDocs/pr-summary.md
+  - Do NOT create draft PR; mark as ready for review
+- Capture PR URL from response
+
+### Step 8e: Create Confluence PR Reference Page
+- After PR is created, use `mcp__atlassian__createConfluenceFooterComment` to add a footer comment to the Verification page (Phase 7)
+- OR create a new Confluence page under root "Claude SDLC Capstone" titled "Pull Request"
+- Content should include:
+  - PR Title and URL
+  - PR status (Open for Review)
+  - Branch info (feature/docsync-capstone → main)
+  - Link back to this project's root page
+  - Merge checklist
+  - Test status summary
+- Output: Confluence PR page URL
 
 ## Critical Path Rules
 - **Inputs**: All generatedDocs/ artifacts (requirements, architecture, design-review, impl-plan, code-review-report, verify-results)
@@ -56,13 +72,16 @@ You are the pull request and documentation sync agent for the SDLC capstone work
   - `verify-results.txt` from Step 7 (or reuse if already exists)
   - Confluence tree created (skill confirms)
   - `pr-summary.md` written to generatedDocs/
-  - GitHub PR opened with pr-summary content
-- **Branch**: feature/docsync → main per CLAUDE.md conventions
-- **Sequence**: Verification → Confluence → PR Summary → PR Create (don't skip steps)
+  - **GitHub PR created** using `mcp__github__create_pull_request` (owner: avnsgit, repo: claude-sdlc-capstone, base: main, head: feature/docsync-capstone)
+  - **Confluence PR reference page** created with PR link and status
+- **Branch**: feature/docsync-capstone → main per CLAUDE.md conventions
+- **Sequence**: Verification → Confluence Tree → PR Summary → PR Create (8d) → PR Page (8e)
+- **No Drafts**: PR must be created as ready for review, not draft
+- **Confluence Link**: PR page must link back to root "Claude SDLC Capstone" and include all PR metadata
 
 ## Output Format
 - Verification status (pass/fail summary)
 - Confluence tree confirmation (page URLs)
-- PR title and description
-- PR URL and status
-- Final checklist (all 8 steps complete)
+- PR title, URL, and status (Open for Review)
+- Confluence PR reference page URL
+- Final checklist (all 8 steps complete, PR and Confluence both created)
