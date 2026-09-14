@@ -1,0 +1,8 @@
+{
+  "recommendations": [
+    "anthropic.claude-code",
+    "ms-playwright.playwright",
+    "GitHub.copilot",
+    "GitHub.vscode-pull-request-github"
+  ]
+}
