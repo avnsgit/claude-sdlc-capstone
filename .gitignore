@@ -5,3 +5,4 @@ coverage/
 .env
 verify-results.txt
 .claude/settings.local.json
+docs/
